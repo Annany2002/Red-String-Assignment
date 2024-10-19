@@ -1,0 +1,21 @@
+# Ignore the virtual environment directory
+.venv/
+
+# Ignore generated files and directories
+__pycache__/
+*.pyc
+.DS_Store
+
+# Ignore data files (if you have any large datasets)
+data/*.csv
+data/*.json
+
+# Ignore model files (if you don't want to track large models)
+code_quality_model/
+
+# Ignore configuration files that might contain sensitive information
+.env
+config.ini
+
+# Ignore notebooks (if you're using Jupyter notebooks for experimentation)
+*.ipynb
