@@ -15,7 +15,7 @@ The goal of this project is to create a tool that assists in detecting code smel
 ## Technologies Used
 
 - Python for building the scripts.
-- Hugging Face's Transformers for model fine-tuning and - generation.
+- Hugging Face's Transformers for model fine-tuning and generation.
 - Datasets for loading and preparing the dataset.
   nltk for text processing.
 - Virtual Environment for isolated dependency management.
