@@ -15,7 +15,7 @@ The goal of this project is to create a tool that assists in detecting code smel
 ## Technologies Used
 
 - Python for building the scripts.
-- Hugging Face's Transformers for model fine-tuning and - generation.
+- Hugging Face's Transformers for model fine-tuning and generation.
 - Datasets for loading and preparing the dataset.
   nltk for text processing.
 - Virtual Environment for isolated dependency management.
@@ -86,12 +86,12 @@ This script will run the model on predefined Python code snippets and display th
 
 **7. Structure of the Project**
 
-<code>analyzer.py</code>: Fine-tunes the GPT-2 model on the provided dataset for code smell detection.
-<code>fine_tune_llm.py</code>: Code for tuning the model, written separately
-<code>test_model.py</code>: Tests the fine-tuned model with sample Python code snippets.
-<code>code_quality_dataset</code>.json: Sample dataset used for training.
-<code>code_quality_model/</code>: Directory where the fine-tuned model is saved.
-<code>requirements.txt</code>: List of required packages for the project.
+- <code>analyzer.py</code>: Fine-tunes the GPT-2 model on the provided dataset for code smell detection.
+- <code>fine_tune_llm.py</code>: Code for tuning the model, written separately
+- <code>test_model.py</code>: Tests the fine-tuned model with sample Python code snippets.
+- <code>code_quality_dataset</code>.json: Sample dataset used for training.
+- <code>code_quality_model/</code>: Directory where the fine-tuned model is saved.
+- <code>requirements.txt</code>: List of required packages for the project.
 
 ## Docker Setup
 
