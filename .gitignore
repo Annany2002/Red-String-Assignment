@@ -16,6 +16,3 @@ code_quality_model/
 # Ignore configuration files that might contain sensitive information
 .env
 config.ini
-
-# Ignore notebooks (if you're using Jupyter notebooks for experimentation)
-*.ipynb

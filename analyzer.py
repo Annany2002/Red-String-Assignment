@@ -2,7 +2,9 @@ import ast
 import subprocess
 import nltk 
 import math
-
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+from datasets import load_dataset
+import fine_tune_llm
 
 def parse_code(code):
     """Parses the given code and returns an AST."""
@@ -39,34 +41,10 @@ def detect_code_duplication(tree, threshold=5):
                 duplicates.append((i, j, code_lines[i:i + threshold]))
     return duplicates
 
-
 def run_flake8(filename):
     """Runs flake8 on the given file and returns the output."""
     result = subprocess.run(['flake8', filename], capture_output=True, text=True)
     return result.stdout
-
-def analyze_code(filename):
-    """Performs static analysis on the given Python file."""
-    with open(filename, "r") as f:
-        code = f.read()
-
-    tree = parse_code(code)
-    if tree:
-        complexity = calculate_complexity(tree)
-        print(f"Cyclomatic complexity: {complexity}")
-
-        duplicates = detect_code_duplication(tree)
-        if duplicates:
-            print("Code duplication found:")
-            for i, j, lines in duplicates:
-                print(f"  Lines {i+1}-{i+len(lines)} duplicate lines {j+1}-{j+len(lines)}:")
-                for line in lines:
-                    print(f"    {line}")
-
-        flake8_output = run_flake8(filename)
-        if flake8_output:
-            print("\nFlake8 output:")
-            print(flake8_output)
 
 def calculate_loc(code):
     """Calculates the lines of code, excluding blank lines and comments."""
@@ -103,60 +81,22 @@ def detect_code_duplication_tokens(tree, threshold=5):
                 duplicates.append((i, j, code_tokens[i:i + threshold]))
     return duplicates
 
-def detect_code_smells_with_llm(code_snippet, llm_model=None):
-    """
-    (Basic example) Uses an LLM (or a placeholder function for now) 
-    to detect code smells in a code snippet.
-    """
-    # Placeholder for LLM integration (replace with actual LLM call later)
-    if "long method" in code_snippet.lower():
-        return ["Potential long method detected."]
-    return []
+def detect_code_smells_with_llm(code_snippet, model_path="./code_quality_model"):
+    """Detects code smells using a fine-tuned LLM."""
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    model = AutoModelForCausalLM.from_pretrained(model_path)
+    code_analyzer = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
-def analyze_code(filename):
-    """Performs static analysis on the given Python file."""
-    with open(filename, "r") as f:
-        code = f.read()
+    prompt = f"Analyze the following Python code for potential code smells:\n\n{code_snippet}\n\nCode smells:"
+    result = code_analyzer(prompt, max_length=200, num_return_sequences=1)
+    generated_text = result[0]['generated_text']
 
-    tree = parse_code(code)
-    if tree:
-        complexity = calculate_complexity(tree)
-        print(f"Cyclomatic complexity: {complexity}")
-
-        duplicates = detect_code_duplication(tree)
-        if duplicates:
-            print("Code duplication found:")
-            for i, j, lines in duplicates:
-                print(f"  Lines {i+1}-{i+len(lines)} duplicate lines {j+1}-{j+len(lines)}:")
-                for line in lines:
-                    print(f"    {line}")
-
-        flake8_output = run_flake8(filename)
-        if flake8_output:
-            print("\nFlake8 output:")
-            print(flake8_output)
-
-        loc = calculate_loc(code)
-        print(f"Lines of Code (LOC): {loc}")
-
-        duplicates = detect_code_duplication_tokens(tree)
-        if duplicates:
-            print("Code duplication (token-based) found:")
-            # ... (print duplicate information)
-
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
-                code_snippet = ast.unparse(node)
-                smells = detect_code_smells_with_llm(code_snippet)
-                if smells:
-                    print(f"In function '{node.name}':")
-                    for smell in smells:
-                        print(f"  - {smell}")
-
-
-# ... (previous functions: parse_code, calculate_complexity, run_flake8, 
-#      calculate_loc, tokenize_code, detect_code_duplication_tokens,
-#      detect_code_smells_with_llm)
+    try:
+        smells_part = generated_text.split("Code smells:")[-1].strip()
+        identified_smells = [smell.strip() for smell in smells_part.split(",")]
+        return identified_smells
+    except:
+        return []
 
 def calculate_comment_density(code):
     """Calculates the comment density of the code."""
@@ -221,6 +161,8 @@ def detect_basic_security_issues(code):
     # Add more checks for hardcoded passwords, SQL injection, etc.
     return issues
 
+fine_tune_llm()
+
 def analyze_code(filename):
     """Performs static analysis on the given Python file."""
     with open(filename, "r") as f:
@@ -255,7 +197,7 @@ def analyze_code(filename):
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 code_snippet = ast.unparse(node)
-                smells = detect_code_smells_with_llm(code_snippet)
+                smells = detect_code_smells_with_llm(code_snippet, model_path="./code_quality_model")
                 if smells:
                     print(f"In function '{node.name}':")
                     for smell in smells:
@@ -279,8 +221,6 @@ def analyze_code(filename):
             for issue in security_issues:
                 print(f"  - {issue}")
 
-        # ... (rest of the analysis: code duplication, LLM)
-
 if __name__ == "__main__":
-    filename = "my_code.py"
+    filename = "code_quality_dataset.json"
     analyze_code(filename)

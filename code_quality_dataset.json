@@ -1,0 +1,54 @@
+[
+  {
+    "code": "def my_long_function(a, b, c, d, e, f):\n  # ... many lines of code ...\n  return result",
+    "issues": ["long method", "low comment density"]
+  },
+  {
+    "code": "class User:\n  # ...\nclass Admin(User):\n  # ... very similar to User ...",
+    "issues": ["code duplication", "potential inheritance misuse"]
+  },
+  {
+    "code": "def process_data(data, options, user_id, context, logger, config):\n  # Validate data\n  if not isinstance(data, list):\n    logger.error('Data is not a list')\n    raise ValueError('Invalid data')\n  # Check options\n  if not options.get('required_key'):\n    logger.warning('Required key is missing')\n    return None\n  # Perform context-sensitive operations\n  for item in data:\n    process_item(item, context)\n  # Log success\n  logger.info(f'Processing complete for user {user_id}')\n  return data",
+    "issues": ["long method", "low cohesion", "hard to test"]
+  },
+  {
+    "code": "class Vehicle:\n  def __init__(self, make, model, year):\n    self.make = make\n    self.model = model\n    self.year = year\n  def drive(self):\n    pass\n\nclass Car(Vehicle):\n  def __init__(self, make, model, year, doors):\n    super().__init__(make, model, year)\n    self.doors = doors\n  def drive(self):\n    print(f'Driving car {self.make} {self.model}')\n\nclass Truck(Vehicle):\n  def __init__(self, make, model, year, capacity):\n    super().__init__(make, model, year)\n    self.capacity = capacity\n  def drive(self):\n    print(f'Driving truck {self.make} {self.model}')",
+    "issues": [
+      "code duplication",
+      "inheritance misuse",
+      "violation of DRY principle"
+    ]
+  },
+  {
+    "code": "def compute_discount(price, discount_rate, user_type, is_holiday, membership_status, special_event=False):\n  base_discount = price * discount_rate\n  if user_type == 'premium':\n    base_discount *= 1.1\n  if is_holiday:\n    base_discount *= 1.05\n  if membership_status == 'gold':\n    base_discount *= 1.2\n  if special_event:\n    base_discount *= 1.3\n  return max(price - base_discount, 0)",
+    "issues": ["long method", "complex logic", "too many conditions"]
+  },
+  {
+    "code": "class Order:\n  def __init__(self, user_id, items, total):\n    self.user_id = user_id\n    self.items = items\n    self.total = total\n  def calculate_total(self):\n    self.total = sum([item['price'] * item['quantity'] for item in self.items])\n  def apply_discount(self, discount):\n    self.total -= discount\n\nclass SpecialOrder(Order):\n  def __init__(self, user_id, items, total, special_discount):\n    super().__init__(user_id, items, total)\n    self.special_discount = special_discount\n  def apply_special_discount(self):\n    self.total -= self.special_discount",
+    "issues": [
+      "code duplication",
+      "complex inheritance structure",
+      "SRP violation"
+    ]
+  },
+  {
+    "code": "def send_email(to_address, subject, body, cc=None, bcc=None, attachments=None, priority='normal', read_receipt=False, tracking=False):\n  # Setup email headers\n  email = EmailMessage()\n  email['To'] = to_address\n  email['Subject'] = subject\n  email.set_content(body)\n  # Handle optional parameters\n  if cc:\n    email['CC'] = cc\n  if bcc:\n    email['BCC'] = bcc\n  if attachments:\n    for attachment in attachments:\n      email.add_attachment(attachment)\n  # Send email\n  smtp.send_message(email)",
+    "issues": ["long parameter list", "method does too much", "low cohesion"]
+  },
+  {
+    "code": "class Animal:\n  def __init__(self, name, species):\n    self.name = name\n    self.species = species\n  def make_sound(self):\n    pass\n\nclass Dog(Animal):\n  def __init__(self, name, breed):\n    super().__init__(name, 'Dog')\n    self.breed = breed\n  def make_sound(self):\n    print('Woof')\n\nclass Cat(Animal):\n  def __init__(self, name, breed):\n    super().__init__(name, 'Cat')\n    self.breed = breed\n  def make_sound(self):\n    print('Meow')",
+    "issues": [
+      "inheritance misuse",
+      "code duplication",
+      "low abstraction level"
+    ]
+  },
+  {
+    "code": "def generate_report(data, include_summary, format_type, title=None, author=None, include_charts=False, chart_type=None, include_legend=False):\n  # Create base report\n  report = Report()\n  report.title = title or 'Untitled'\n  report.author = author or 'Anonymous'\n  if include_summary:\n    report.add_summary(data)\n  if format_type == 'pdf':\n    report.set_format('pdf')\n  else:\n    report.set_format('html')\n  if include_charts:\n    report.add_chart(data, chart_type, include_legend)\n  return report",
+    "issues": ["long parameter list", "method does too much", "SRP violation"]
+  },
+  {
+    "code": "class Product:\n  def __init__(self, name, price):\n    self.name = name\n    self.price = price\n\nclass DiscountProduct(Product):\n  def __init__(self, name, price, discount):\n    super().__init__(name, price)\n    self.discount = discount\n  def apply_discount(self):\n    self.price -= self.discount\n\nclass BundleProduct(Product):\n  def __init__(self, name, price, bundle_discount):\n    super().__init__(name, price)\n    self.bundle_discount = bundle_discount\n  def apply_bundle_discount(self):\n    self.price -= self.bundle_discount",
+    "issues": ["code duplication", "low cohesion", "inheritance misuse"]
+  }
+]
