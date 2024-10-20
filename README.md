@@ -93,6 +93,10 @@ This script will run the model on predefined Python code snippets and display th
 <code>code_quality_model/</code>: Directory where the fine-tuned model is saved.
 <code>requirements.txt</code>: List of required packages for the project.
 
+## Docker Setup
+
+[Docker Hub](https://hub.docker.com/r/annany/red-string-assignment)
+
 **Dependencies**
 
 The project requires the following packages, which are listed in <code>requirements.txt </code>:

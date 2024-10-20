@@ -1,0 +1,10 @@
+# Exclude files and directories that are not necessary for the application
+.git
+.svn
+.hg
+.idea
+.vscode
+*.pyc
+*.swp
+*#
+*.DS_Store
